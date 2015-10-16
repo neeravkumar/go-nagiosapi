@@ -43,3 +43,5 @@ _testmain.go
 
 t-data/*local
 
+# compiled binaries
+nagios-api
