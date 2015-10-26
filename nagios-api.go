@@ -18,6 +18,10 @@ var version string
 var log = logging.MustGetLogger("main")
 var stdout_log_format = logging.MustStringFormatter("%{color:bold}%{time:2006-01-02T15:04:05.9999Z-07:00}%{color:reset}%{color} [%{level:.1s}] %{color:reset}%{shortpkg}[%{longfunc}] %{message}")
 
+type Config struct {
+	ListenAddr string
+}
+
 func main() {
 	stderrBackend := logging.NewLogBackend(os.Stderr, "", 0)
 	stderrFormatter := logging.NewBackendFormatter(stderrBackend, stdout_log_format)
@@ -31,19 +35,26 @@ func main() {
 		IndentJSON: true,
 	})
 	file, _ := os.Open("t-data/status.dat.local")
-	st := nagios.LoadStatus(file)
+	st, err := nagios.LoadStatus(file)
+	fmt.Printf("parse err: %+v\n", err)
 	file.Close()
 	js, _ := json.Marshal(st)
-
+	_ = js
 	app := webapi.NewWebapp()
 	app.NagiosStatus = st
 
 	goji.Get("/", func(c web.C, w http.ResponseWriter, req *http.Request) {
-		fmt.Fprintf(w, "%s", js)
-		//		r.JSON(w, http.StatusOK, st) // map[string]string{"welcome": "This is rendered JSON!"})
+		//		fmt.Printf(w, "%s", js)
+		r.JSON(w, http.StatusOK, st) // map[string]string{"welcome": "This is rendered JSON!"})
 	})
 	goji.Get("/host/:host", func(c web.C, w http.ResponseWriter, req *http.Request) {
 		app.NagiosHost(c, w, req, st)
+	})
+	goji.Get("/service/:host", func(c web.C, w http.ResponseWriter, req *http.Request) {
+		app.NagiosHostServices(c, w, req, st)
+	})
+	goji.Get("/service/:host/:service", func(c web.C, w http.ResponseWriter, req *http.Request) {
+		app.NagiosService(c, w, req, st)
 	})
 	goji.Get("/update", func(c web.C, w http.ResponseWriter, req *http.Request) {
 		file, _ := os.Open("t-data/status.dat.local")
