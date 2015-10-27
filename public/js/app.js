@@ -166,15 +166,7 @@
                 obj.service=svcName;
                 obj.svc = services[svcName];
                 obj.fill = "#000000";
-                if (services[svcName].state == "OK") {
-                    obj.fill = "#33cc33";
-                } else if (services[svcName].state == "WARNING") {
-                    obj.fill = "#aaaa00";
-                } else if (services[svcName].state == "CRITICAL") {
-                    obj.fill = "#aa0000";
-                } else {
-                    obj.fill = "#00cccc";
-                }
+                obj.fill = getColorForService(services[svcName]);
                 if (loop < topHosts) {
                     all_services.push(obj);
                 }
@@ -208,12 +200,23 @@
                 div.transition()
                     .duration(200)
                     .style("opacity", .9);
-                div.html("host:" + d.host +
-                         "<br>Service:" + d.service
-                         + "<br>Data:<pre>" +  JSON.stringify(d,null,2) + "</pre>"
-                        )
+                div.html(function() {
+                    ts1 = new Date (d.svc["last_state_change"])
+                    ts2 = new Date().getTime();
+                    interval = new Date(ts2-ts1);
+                    var intervalStr = '';
+                    intervalStr += interval.getUTCDate()-1 + "d ";
+                    intervalStr += interval.getUTCHours() + "h ";
+                    intervalStr += interval.getUTCMinutes() + "m ";
+                    intervalStr += interval.getUTCSeconds() + "s ";
+                    return "host:" + d.host
+                        + "<br>Service:" + d.service
+                        + "<br>Last change: " + intervalStr
+                        + "<br>Data:<pre>" +  JSON.stringify(d,null,2) + "</pre>";
+                })
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY - 28) + "px")
+                    .style("background","lightsteelblue")
             })
             .on("mouseout", function(d) {
                 div.transition()
@@ -230,7 +233,22 @@
             .attr('y',function(d) {
                 return d.y;
             })
-            .attr("fill", "#aaaaff");
+            .attr("fill", "#aaaaff")
+            .on("mouseover", function(d,i) {
+                div.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                div.html("<br>Data:<pre>" +  JSON.stringify(d,null,2) + "</pre>"
+                        )
+                    .style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY - 28) + "px")
+                    .style("background","lightsteelblue")
+            })
+            .on("mouseout", function(d) {
+                div.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            });
         heatmap.selectAll('.heatmap').data(host_labels).enter().append('text')
             .attr("color","#FF0000")
             .attr('x', function(d) {
@@ -269,5 +287,49 @@
         d3.selectAll('[role="calibration"] [name="displayType"]').on('click',function(){
             renderColor();
         });
+    }
+    function getColorForService(svc) {
+        ts1 = new Date (svc["last_state_change"])
+        ts2 = new Date().getTime();
+        interval = new Date(ts2-ts1);
+        if (svc.state == "OK") {
+            if (interval > (7*86400*1000)) {
+                return "#117711";
+            }
+            else if (interval > (86400*1000)) {
+                return "#11aa11";
+            } else {
+                return "#00ff00";
+            }
+        } else if (svc.state == "WARNING") {
+            if (interval > (7*86400*1000)) {
+                return "#444400";
+            }
+            else if (interval > (86400*1000)) {
+                return "#aaaa00";
+            }
+            else {
+                return "#eeee00"
+            }
+        } else if (svc.state == "CRITICAL") {
+            if (interval > (7*86400*1000)) {
+                return "#550000";
+            }
+            else if (interval > (86400*1000)) {
+                return "#aa0000";
+            } else {
+                return "#ff0000";
+            }
+        } else {
+            if (interval > (7*86400*1000)) {
+                return "#007777";
+            }
+            else if (interval > (86400*1000)) {
+                return "#00aaaa";
+            } else {
+                return "#00cccc";
+            }
+        }
+
     }
 })();
