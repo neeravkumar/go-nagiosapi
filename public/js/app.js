@@ -201,7 +201,7 @@
                         )
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY - 28) + "px")
-                    .style("background","lightsteelblue")
+                    .style("background","#339933")
             })
             .on("mouseout", function(d) {
                 div.transition()
@@ -255,7 +255,7 @@
                 })
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY - 28) + "px")
-                    .style("background","lightsteelblue")
+                    .style("background","#339933")
             })
             .on("mouseout", function(d) {
                 div.transition()
