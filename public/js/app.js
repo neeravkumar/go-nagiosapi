@@ -183,6 +183,45 @@
             //            heatmap.selectAll("").remove();
         });
         heatmap.selectAll('*').remove();
+        heatmap.selectAll('.heatmap').data(host_labels).enter().append('rect')
+            .attr('width', offset - 2)
+            .attr('height',cellSize)
+            .attr('x', function(d) {
+                return d.x
+            })
+            .attr('y',function(d) {
+                return d.y;
+            })
+            .attr("fill", "#22aa22")
+            .on("mouseover", function(d,i) {
+                div.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                div.html("<br>Data:<pre>" +  JSON.stringify(d,null,2) + "</pre>"
+                        )
+                    .style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY - 28) + "px")
+                    .style("background","lightsteelblue")
+            })
+            .on("mouseout", function(d) {
+                div.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            });
+        heatmap.selectAll('.heatmap').data(host_labels).enter().append('text')
+            .attr("color","#FF0000")
+            .attr('x', function(d) {
+                return d.x + 2
+            })
+
+            .attr('y',function(d) {
+                return d.y + (cellSize/1.4);
+            })
+            .attr("font-size",12)
+            .attr("font-family","monospace")
+            .text(function(d) {
+                return d.text
+            })
         heatmap.selectAll('.heatmap').data(all_services).enter().append('rect')
             .attr('width',cellSize)
             .attr('height',cellSize)
@@ -224,45 +263,7 @@
                     .style("opacity", 0);
             });
 //        heatmap.selectAll('*').remove();
-        heatmap.selectAll('.heatmap').data(host_labels).enter().append('rect')
-            .attr('width', offset - 2)
-            .attr('height',cellSize)
-            .attr('x', function(d) {
-                return d.x
-            })
-            .attr('y',function(d) {
-                return d.y;
-            })
-            .attr("fill", "#22aa22")
-            .on("mouseover", function(d,i) {
-                div.transition()
-                    .duration(200)
-                    .style("opacity", .9);
-                div.html("<br>Data:<pre>" +  JSON.stringify(d,null,2) + "</pre>"
-                        )
-                    .style("left", (d3.event.pageX) + "px")
-                    .style("top", (d3.event.pageY - 28) + "px")
-                    .style("background","lightsteelblue")
-            })
-            .on("mouseout", function(d) {
-                div.transition()
-                    .duration(500)
-                    .style("opacity", 0);
-            });
-        heatmap.selectAll('.heatmap').data(host_labels).enter().append('text')
-            .attr("color","#FF0000")
-            .attr('x', function(d) {
-                return d.x + 2
-            })
 
-            .attr('y',function(d) {
-                return d.y + (cellSize/1.4);
-            })
-            .attr("font-size",12)
-            .attr("font-family","monospace")
-            .text(function(d) {
-                return d.text
-            })
 
 
 //        document.write("<pre> host: " + JSON.stringify(host_labels,null,2));
