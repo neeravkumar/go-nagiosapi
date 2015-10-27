@@ -30,7 +30,6 @@ body{font-family:arial, 'Hiragino Sans GB',Tahoma, Arial, Helvetica, STHeiti;fon
 
 div.tooltip {
     position: absolute;
-    text-align: center;
     min-width: 200px;
     min-height: 100px;
     padding: 2px;
