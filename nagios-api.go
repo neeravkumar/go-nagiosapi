@@ -24,6 +24,7 @@ type Config struct {
 	ListenAddr       string
 	NagiosStatusFile string
 	StaticDir        string
+	UpdateInterval   time.Duration
 }
 
 func main() {
@@ -42,11 +43,27 @@ func main() {
 
 	cfg.NagiosStatusFile = "t-data/status.dat.local" ///var/www/saz/status.dat"
 	cfg.StaticDir = "./public"
-	serializerCache := cache.New(0*time.Minute, 30*time.Second)
+	if cfg.UpdateInterval == 0 {
+		cfg.UpdateInterval = time.Second * 30
+	}
+
+	serializerCache := cache.New(30*time.Second, 5*time.Minute)
 	file, _ := os.Open(cfg.NagiosStatusFile)
 	st, err := nagios.LoadStatus(file)
 	fmt.Printf("parse err: %+v\n", err)
 	file.Close()
+
+	// set and run update timer
+	updateTimer := time.NewTicker(cfg.UpdateInterval)
+	go func() {
+		for _ = range updateTimer.C {
+			log.Info("updating from file")
+			file, _ := os.Open(cfg.NagiosStatusFile)
+			st.UpdateStatus(file)
+			serializerCache.Delete("nagios-all")
+			file.Close()
+		}
+	}()
 
 	app := webapi.NewWebapp()
 	app.NagiosStatus = st
