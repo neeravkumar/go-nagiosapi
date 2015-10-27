@@ -82,7 +82,7 @@
         failed_service_count = {};
         host_service_count = {};
         services = [];
-        console.log("data:" + dataRaw);
+        //console.log("data:" + dataRaw);
         // first, extract statistic data from all services so we can have consitent sorting
         data.forEach(function (record,loop) {
             host = record.key;
@@ -128,10 +128,10 @@
         services.forEach(function(a,i) {
             services_column[a]=i+1;
         });
-        console.log(JSON.stringify(failed_service_count,null,2));
+        // console.log(JSON.stringify(failed_service_count,null,2));
 
         data = data.sort ( function(a, b) {
-            console.log("t:" + a.key + " r:" + JSON.stringify(failed_service_count[a.key],null,2));
+            //console.log("t:" + a.key + " r:" + JSON.stringify(failed_service_count[a.key],null,2));
             diff = failed_service_count[b.key] - failed_service_count[a.key];
             if (diff != 0) {
                 return diff;
@@ -233,7 +233,7 @@
             .attr('y',function(d) {
                 return d.y;
             })
-            .attr("fill", "#aaaaff")
+            .attr("fill", "#22aa22")
             .on("mouseover", function(d,i) {
                 div.transition()
                     .duration(200)
@@ -256,7 +256,7 @@
             })
 
             .attr('y',function(d) {
-                return d.y + (cellSize/1.5);
+                return d.y + (cellSize/1.4);
             })
             .attr("font-size",12)
             .attr("font-family","monospace")
