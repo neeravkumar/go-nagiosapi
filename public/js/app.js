@@ -294,7 +294,13 @@
         ts2 = new Date().getTime();
         interval = new Date(ts2-ts1);
         if (svc.state == "OK") {
-            if (interval > (7*86400*1000)) {
+            if (svc.downtime) {
+                return "#666666"
+            }
+            else if (svc.flapping) {
+                return "#6600aa";
+            }
+            else if (interval > (7*86400*1000)) {
                 return "#117711";
             }
             else if (interval > (86400*1000)) {
@@ -303,18 +309,24 @@
                 return "#00ff00";
             }
         } else if (svc.state == "WARNING") {
-            if (interval > (7*86400*1000)) {
-                return "#444400";
+            if (svc.downtime) {
+                return "#666600"
+            }
+            else if (interval > (7*86400*1000)) {
+                return "#aa6600";
             }
             else if (interval > (86400*1000)) {
-                return "#aaaa00";
+                return "#ddaa00";
             }
             else {
-                return "#eeee00"
+                return "#ffdd00"
             }
         } else if (svc.state == "CRITICAL") {
+            if (svc.downtime) {
+                return "#550000"
+            }
             if (interval > (7*86400*1000)) {
-                return "#550000";
+                return "#771111";
             }
             else if (interval > (86400*1000)) {
                 return "#aa0000";
