@@ -13,10 +13,11 @@ else
     exit 1
 fi
 
-
+# get GOARCH/GOOS vars
 go env > .env.sh
 source .env.sh
 
+# try to detect sane gopath
 if [ "z$GOPATH" = "z" ] ; then
     if [ "z$WORKSPACE" = "z" ] ; then
         echo "No WORKSPACE, using tmp/go as GOPATH"
@@ -33,6 +34,7 @@ if [ "z$GOROOT" != "z" ] ; then
 fi
 
 
+# try to detect if we are cross-compiling to 32 bit and add that to path
 if [ -d "$GOPATH/bin/${GOOS}_${GOARCH}" ] ; then
     echo "=== [cross-compile] adding '$GOPATH/bin/${GOOS}_${GOARCH}' to path"
     export PATH="$GOPATH/bin/${GOOS}_${GOARCH}:$PATH"
@@ -41,8 +43,6 @@ else
     echo "===  adding '$GOPATH/bin' to path"
     export PATH="$GOPATH/bin:$PATH"
 fi
-
-
 
 echo "=== installing deps"
 if $(which gom >/dev/null 2>&1)  ; then

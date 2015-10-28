@@ -12,8 +12,8 @@ var renderer = render.New(render.Options{
 	IndentJSON: true,
 })
 
-var json404 =  map[string]string{
-	"msg":"not found",
+var json404 = map[string]string{
+	"msg": "not found",
 }
 
 type Webapp struct {
@@ -38,6 +38,7 @@ func (w *Webapp) NagiosHost(c web.C, wr http.ResponseWriter, r *http.Request, st
 	}
 	status.RUnlock()
 }
+
 // return all services belonging to host
 func (w *Webapp) NagiosHostServices(c web.C, wr http.ResponseWriter, r *http.Request, status nagios.Status) {
 	status.RLock()
