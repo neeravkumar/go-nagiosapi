@@ -24,11 +24,11 @@
     var scaleOkMax = 30*86400*1000;
     var scaleOk =  d3.scale.linear()
             .domain([900*1000, 1*86400*1000,7*86400*1000,scaleOkMax + 1])
-            .range(["#00ff00","#11aa11","#117711","#115511","#115511"]);
+            .range(["#00ff00","#11aa11","#117711","#005500","#004400"]);
     var scaleWarningMax = 30*86400*1000;
     var scaleWarning =  d3.scale.linear()
             .domain([900*1000, 1*86400*1000,7*86400*1000,scaleWarningMax + 1])
-            .range(["#ffdd00","#ddaa00","#aa6600","#993300","#993300"]);
+            .range(["#ffdd00","#ddaa00","#aa6600","#996600","#996600"]);
     var scaleCriticalMax = 30*86400*1000;
     var scaleCritical =  d3.scale.linear()
             .domain([900*1000, 1*86400*1000,7*86400*1000,scaleCriticalMax + 1])
@@ -265,9 +265,11 @@
                     intervalStr += interval.getUTCHours() + "h ";
                     intervalStr += interval.getUTCMinutes() + "m ";
                     intervalStr += interval.getUTCSeconds() + "s ";
-                    return "host:" + d.host
-                        + "<br>Service:" + d.service
-                        + "<br>Last change: " + intervalStr
+                    return "<b>host:</b>" + d.host
+                        + "<br><b>Service:</b>" + d.service
+                        + "<br><b>Status:</b>" + d.svc['state']
+                        + "<br><b>Message:</b>" + d.svc['check_message']
+                        + "<br><b>Last change:</b>" + intervalStr
                         + "<br>Data:<pre>" +  JSON.stringify(d,null,2) + "</pre>";
                 })
                     .style("left", (d3.event.pageX) + "px")
