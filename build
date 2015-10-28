@@ -37,6 +37,7 @@ if [ -d "$GOPATH/bin/$GOOS_$GOARCH" ] ; then
     echo "=== [cross-compile] adding '$GOPATH/bin/$GOOS_$GOARCH' to path"
     export PATH="$GOPATH/bin/$GOOS_$GOARCH:$PATH"
 else
+    echo "$GOPATH/bin/$GOOS_$GOARCH"
     echo "=== [cross-compile] adding '$GOPATH/bin' to path"
     export PATH="$GOPATH/bin:$PATH"
 fi
