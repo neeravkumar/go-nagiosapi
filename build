@@ -14,8 +14,8 @@ else
 fi
 
 
-go env > .env.go
-source .env.go
+go env > .env.sh
+source .env.sh
 
 if [ "z$GOPATH" = "z" ] ; then
     if [ "z$WORKSPACE" = "z" ] ; then
