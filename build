@@ -5,17 +5,6 @@
 
 # source golang vars
 
-go env > .env.go
-source .env.go
-
-if [ "z$GOROOT" != "z" ] ; then
-    echo "=== adding GOROOT $GOROOT/bin to PATH"
-    export PATH="$GOROOT/bin:$PATH"
-fi
-
-echo "=== adding GOPATH/bin '$GOPATH/bin' to path"
-export PATH="$GOPATH/bin:$PATH"
-
 if $(which go >/dev/null 2>&1)  ; then
     echo -n "using "
     go version
@@ -23,6 +12,35 @@ else
     echo "=== Install Go in path first!"
     exit 1
 fi
+
+
+go env > .env.go
+source .env.go
+
+if [ "z$GOPATH" = "z" ] ; then
+    if [ "z$WORKSPACE" = "z" ] ; then
+        echo "No WORKSPACE, using tmp/go as GOPATH"
+        export GOPATH="$(pwd)/tmp/go"
+        mkdir -p "$GOPATH"
+    else
+        export GOPATH="$WORKSPACE/go"
+    fi
+fi
+echo "=== using $GOPATH as GOPATH"
+if [ "z$GOROOT" != "z" ] ; then
+    echo "=== adding GOROOT $GOROOT/bin to PATH"
+    export PATH="$GOROOT/bin:$PATH"
+fi
+
+
+if [ -d "$GOPATH/bin/$GOOS_$GOARCH" ] ; then
+    echo "=== [cross-compile] adding '$GOPATH/bin/$GOOS_$GOARCH' to path"
+    export PATH="$GOPATH/bin/$GOOS_$GOARCH:$PATH"
+else
+    echo "=== [cross-compile] adding '$GOPATH/bin' to path"
+    export PATH="$GOPATH/bin:$PATH"
+fi
+
 
 
 echo "=== installing deps"
