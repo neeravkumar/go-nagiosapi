@@ -33,6 +33,13 @@ if [ "z$GOROOT" != "z" ] ; then
     export PATH="$GOROOT/bin:$PATH"
 fi
 
+echo "=== installing deps"
+if $(which gom >/dev/null 2>&1)  ; then
+    echo "=== Gom installed"
+else
+    echo "=== Installing Gom"
+    go get github.com/mattn/gom
+fi
 
 # try to detect if we are cross-compiling to 32 bit and add that to path
 if [ -d "$GOPATH/bin/${GOOS}_${GOARCH}" ] ; then
@@ -42,14 +49,6 @@ else
     echo "$GOPATH/bin/$GOOS_$GOARCH"
     echo "===  adding '$GOPATH/bin' to path"
     export PATH="$GOPATH/bin:$PATH"
-fi
-
-echo "=== installing deps"
-if $(which gom >/dev/null 2>&1)  ; then
-    echo "=== Gom installed"
-else
-    echo "=== Installing Gom"
-    go get github.com/mattn/gom
 fi
 
 if $(which go-junit-report >/dev/null 2>&1) ;then
