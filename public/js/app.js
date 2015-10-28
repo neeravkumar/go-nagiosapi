@@ -326,12 +326,19 @@
             if (svc.downtime) {
                 return "#666600"
             }
+            else if (svc.ack) {
+                return "#555533"
+            }
+
             else {
                 return scaleWarning(Math.min(interval,scaleWarningMax))
             }
         } else if (svc.state == "CRITICAL") {
             if (svc.downtime) {
                 return "#550000"
+            }
+            else if (svc.ack) {
+                return "#444444"
             }
             else {
                 return scaleCritical(Math.min(interval,scaleCriticalMax))
