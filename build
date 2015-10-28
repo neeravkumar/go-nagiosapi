@@ -3,17 +3,11 @@
 # Jenkins +  golang plugin compatible builder/test
 # test will be outputted in report.xml
 
-if [ "z$GOPATH" = "z" ] ; then
-    if [ "z$WORKSPACE" = "z" ] ; then
-        echo "No WORKSPACE, using tmp/go as GOPATH"
-        export GOPATH="$(pwd)/tmp/go"
-        mkdir -p "$GOPATH"
-    else
-        export GOPATH="$WORKSPACE/go"
-    fi
-fi
+# source golang vars
 
-echo "=== using $GOPATH as GOPATH"
+go env > .env.go
+source .env.go
+
 if [ "z$GOROOT" != "z" ] ; then
     echo "=== adding GOROOT $GOROOT/bin to PATH"
     export PATH="$GOROOT/bin:$PATH"
