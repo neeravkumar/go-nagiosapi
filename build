@@ -33,9 +33,9 @@ if [ "z$GOROOT" != "z" ] ; then
 fi
 
 
-if [ -d "$GOPATH/bin/$(GOOS)_$(GOARCH)" ] ; then
-    echo "=== [cross-compile] adding '$GOPATH/bin/$(GOOS)_$(GOARCH)' to path"
-    export PATH="$GOPATH/bin/$(GOOS)_$(GOARCH):$PATH"
+if [ -d "$GOPATH/bin/${GOOS}_${GOARCH}" ] ; then
+    echo "=== [cross-compile] adding '$GOPATH/bin/${GOOS}_${GOARCH}' to path"
+    export PATH="$GOPATH/bin/${GOOS}_${GOARCH}:$PATH"
 else
     echo "$GOPATH/bin/$GOOS_$GOARCH"
     echo "===  adding '$GOPATH/bin' to path"
