@@ -21,6 +21,23 @@
     dayOffset = 0,
     colorCalibration = ['#f6faaa','#FEE08B','#FDAE61','#F46D43','#D53E4F','#9E0142'],
     dailyValueExtent = {};
+    var scaleOkMax = 30*86400*1000;
+    var scaleOk =  d3.scale.linear()
+            .domain([900*1000, 1*86400*1000,7*86400*1000,scaleOkMax + 1])
+            .range(["#00ff00","#11aa11","#117711","#115511","#115511"]);
+    var scaleWarningMax = 30*86400*1000;
+    var scaleWarning =  d3.scale.linear()
+            .domain([900*1000, 1*86400*1000,7*86400*1000,scaleWarningMax + 1])
+            .range(["#ffdd00","#ddaa00","#aa6600","#993300","#993300"]);
+    var scaleCriticalMax = 30*86400*1000;
+    var scaleCritical =  d3.scale.linear()
+            .domain([900*1000, 1*86400*1000,7*86400*1000,scaleCriticalMax + 1])
+            .range(["#ff0000","#aa0000","#770000","#660000","#660000"]);
+
+    var scaleUnknownMax = 30*86400*1000;
+    var scaleUnknown =  d3.scale.linear()
+            .domain([900*1000, scaleUnknownMax + 1])
+            .range(["#00cccc","#00aaaa"]);
 
   //axises and scales
   var axisWidth = 0 ,
@@ -300,47 +317,29 @@
             else if (svc.flapping) {
                 return "#6600aa";
             }
-            else if (interval > (7*86400*1000)) {
-                return "#117711";
-            }
-            else if (interval > (86400*1000)) {
-                return "#11aa11";
-            } else {
-                return "#00ff00";
+            else {
+                return scaleOk(Math.min(interval,scaleOkMax))
             }
         } else if (svc.state == "WARNING") {
             if (svc.downtime) {
                 return "#666600"
             }
-            else if (interval > (7*86400*1000)) {
-                return "#aa6600";
-            }
-            else if (interval > (86400*1000)) {
-                return "#ddaa00";
-            }
             else {
-                return "#ffdd00"
+                return scaleWarning(Math.min(interval,scaleWarningMax))
             }
         } else if (svc.state == "CRITICAL") {
             if (svc.downtime) {
                 return "#550000"
             }
-            if (interval > (7*86400*1000)) {
-                return "#771111";
-            }
-            else if (interval > (86400*1000)) {
-                return "#aa0000";
-            } else {
-                return "#ff0000";
+            else {
+                return scaleCritical(Math.min(interval,scaleCriticalMax))
             }
         } else {
             if (interval > (7*86400*1000)) {
                 return "#007777";
             }
-            else if (interval > (86400*1000)) {
-                return "#00aaaa";
-            } else {
-                return "#00cccc";
+            else {
+                return scaleUnknown(Math.min(interval,scaleUnknownMax))
             }
         }
 
