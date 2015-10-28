@@ -2,7 +2,7 @@
 version=$(shell git describe --tags --long --always|sed 's/^v//')
 
 all: dep
-	gom exec go build  -ldflags "-X main.version $(version)" -o nagios-api *.go
+	gom exec go build  -ldflags "-X main.version=$(version)" -o nagios-api *.go
 	go fmt
 
 

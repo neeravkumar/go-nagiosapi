@@ -13,14 +13,15 @@ if [ "z$GOPATH" = "z" ] ; then
     fi
 fi
 
-echo "=== adding GOPATH/bin '$GOPATH/bin' to path"
-export PATH="$GOPATH/bin:$PATH"
-
 echo "=== using $GOPATH as GOPATH"
 if [ "z$GOROOT" != "z" ] ; then
     echo "=== adding GOROOT $GOROOT/bin to PATH"
     export PATH="$GOROOT/bin:$PATH"
 fi
+
+echo "=== adding GOPATH/bin '$GOPATH/bin' to path"
+export PATH="$GOPATH/bin:$PATH"
+
 if $(which go >/dev/null 2>&1)  ; then
     echo -n "using "
     go version
