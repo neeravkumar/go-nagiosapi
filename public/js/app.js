@@ -270,7 +270,7 @@
                         + "<br><b>Status:</b>" + d.svc['state']
                         + "<br><b>Message:</b>" + d.svc['check_message']
                         + "<br><b>Last change:</b>" + intervalStr
-                        + "<br>Data:<pre>" +  JSON.stringify(d,null,2) + "</pre>";
+                        + "<br>Data:<pre>" +  JSON.stringify(d.svc,null,2) + "</pre>";
                 })
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY - 28) + "px")
