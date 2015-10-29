@@ -3,11 +3,11 @@
   var itemSize = 18,
       cellSize = itemSize-1,
       offset = 100,
-    width = 800,
+    width = 1800,
     height = 800,
       margin = {top:20,right:20,bottom:20,left:25};
 
-  var topHosts = 30;
+    var topHosts = Math.abs(height/itemSize)-2;
 
   //formats
   var hourFormat = d3.time.format('%H'),
