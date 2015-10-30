@@ -314,7 +314,7 @@
         interval = new Date(ts2-ts1);
         if (svc.state == "OK") {
             if (svc.downtime) {
-                return "#666666"
+                return "#446644"
             }
             else if (svc.flapping) {
                 return "#6600aa";
@@ -335,7 +335,7 @@
             }
         } else if (svc.state == "CRITICAL") {
             if (svc.downtime) {
-                return "#550000"
+                return "#553333"
             }
             else if (svc.ack) {
                 return "#444444"
@@ -344,8 +344,11 @@
                 return scaleCritical(Math.min(interval,scaleCriticalMax))
             }
         } else {
-            if (interval > (7*86400*1000)) {
-                return "#007777";
+            if (svc.downtime) {
+                return "#335555"
+            }
+            else if (svc.ack) {
+                return "#335555"
             }
             else {
                 return scaleUnknown(Math.min(interval,scaleUnknownMax))
