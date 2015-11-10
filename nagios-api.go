@@ -1,18 +1,18 @@
 package main
 
 import (
-	"github.com/op/go-logging"
-	"os"
-	"time"
 	"encoding/json"
 	"fmt"
 	"github.com/efigence/go-nagios"
+	"github.com/op/go-logging"
 	"github.com/pmylund/go-cache"
 	"github.com/theosomefactory/goji-gzip"
 	"github.com/unrolled/render" // or "gopkg.in/unrolled/render.v1")
 	"github.com/zenazn/goji"
 	"github.com/zenazn/goji/web"
 	"net/http"
+	"os"
+	"time"
 	"webapi"
 )
 
@@ -40,8 +40,11 @@ func main() {
 	r := render.New(render.Options{
 		IndentJSON: true,
 	})
-
-	cfg.NagiosStatusFile = "t-data/status.dat.local" ///var/www/saz/status.dat"
+	if os.Args[1] == "" {
+		cfg.NagiosStatusFile = "t-data/status.dat.local"
+	} else {
+		cfg.NagiosStatusFile = os.Args[1]
+	}
 	cfg.StaticDir = "./public"
 	if cfg.UpdateInterval == 0 {
 		cfg.UpdateInterval = time.Second * 30
