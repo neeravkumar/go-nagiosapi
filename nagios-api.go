@@ -4,11 +4,11 @@ import (
 	"github.com/op/go-logging"
 	"os"
 	"time"
-	//	"strings"
 	"encoding/json"
 	"fmt"
 	"github.com/efigence/go-nagios"
 	"github.com/pmylund/go-cache"
+	"github.com/theosomefactory/goji-gzip"
 	"github.com/unrolled/render" // or "gopkg.in/unrolled/render.v1")
 	"github.com/zenazn/goji"
 	"github.com/zenazn/goji/web"
@@ -67,6 +67,7 @@ func main() {
 
 	app := webapi.NewWebapp()
 	app.NagiosStatus = st
+	goji.Use(gzip.Compress)
 	goji.Get("/s/*", http.StripPrefix("/s", http.FileServer(http.Dir(cfg.StaticDir))))
 	goji.Get("/", http.FileServer(http.Dir(cfg.StaticDir)))
 	goji.Get("/index.html", http.FileServer(http.Dir(cfg.StaticDir)))
