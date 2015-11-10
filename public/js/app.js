@@ -3,11 +3,11 @@
   var itemSize = 18,
       cellSize = itemSize-1,
       offset = 100,
-    width = 800,
+    width = 1800,
     height = 800,
       margin = {top:20,right:20,bottom:20,left:25};
 
-  var topHosts = 30;
+    var topHosts = Math.abs(height/itemSize)-2;
 
   //formats
   var hourFormat = d3.time.format('%H'),
@@ -24,11 +24,11 @@
     var scaleOkMax = 30*86400*1000;
     var scaleOk =  d3.scale.linear()
             .domain([900*1000, 1*86400*1000,7*86400*1000,scaleOkMax + 1])
-            .range(["#00ff00","#11aa11","#117711","#115511","#115511"]);
+            .range(["#00ff00","#11aa11","#117711","#005500","#004400"]);
     var scaleWarningMax = 30*86400*1000;
     var scaleWarning =  d3.scale.linear()
             .domain([900*1000, 1*86400*1000,7*86400*1000,scaleWarningMax + 1])
-            .range(["#ffdd00","#ddaa00","#aa6600","#993300","#993300"]);
+            .range(["#ffdd00","#ddaa00","#aa6600","#996600","#996600"]);
     var scaleCriticalMax = 30*86400*1000;
     var scaleCritical =  d3.scale.linear()
             .domain([900*1000, 1*86400*1000,7*86400*1000,scaleCriticalMax + 1])
@@ -265,10 +265,12 @@
                     intervalStr += interval.getUTCHours() + "h ";
                     intervalStr += interval.getUTCMinutes() + "m ";
                     intervalStr += interval.getUTCSeconds() + "s ";
-                    return "host:" + d.host
-                        + "<br>Service:" + d.service
-                        + "<br>Last change: " + intervalStr
-                        + "<br>Data:<pre>" +  JSON.stringify(d,null,2) + "</pre>";
+                    return "<b>host:</b>" + d.host
+                        + "<br><b>Service:</b>" + d.service
+                        + "<br><b>Status:</b>" + d.svc['state']
+                        + "<br><b>Message:</b>" + d.svc['check_message']
+                        + "<br><b>Last change:</b>" + intervalStr
+                        + "<br>Data:<pre>" +  JSON.stringify(d.svc,null,2) + "</pre>";
                 })
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY - 28) + "px")
@@ -312,7 +314,7 @@
         interval = new Date(ts2-ts1);
         if (svc.state == "OK") {
             if (svc.downtime) {
-                return "#666666"
+                return "#446644"
             }
             else if (svc.flapping) {
                 return "#6600aa";
@@ -324,19 +326,29 @@
             if (svc.downtime) {
                 return "#666600"
             }
+            else if (svc.ack) {
+                return "#555533"
+            }
+
             else {
                 return scaleWarning(Math.min(interval,scaleWarningMax))
             }
         } else if (svc.state == "CRITICAL") {
             if (svc.downtime) {
-                return "#550000"
+                return "#553333"
+            }
+            else if (svc.ack) {
+                return "#444444"
             }
             else {
                 return scaleCritical(Math.min(interval,scaleCriticalMax))
             }
         } else {
-            if (interval > (7*86400*1000)) {
-                return "#007777";
+            if (svc.downtime) {
+                return "#335555"
+            }
+            else if (svc.ack) {
+                return "#335555"
             }
             else {
                 return scaleUnknown(Math.min(interval,scaleUnknownMax))
