@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/efigence/go-nagios"
+	"github.com/neeravkumar/go-nagios"
 	"github.com/op/go-logging"
 	"github.com/pmylund/go-cache"
 	"github.com/theosomefactory/goji-gzip"

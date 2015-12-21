@@ -1,7 +1,7 @@
 package webapi
 
 import (
-	"github.com/efigence/go-nagios"
+	"github.com/neeravkumar/go-nagios"
 	"github.com/unrolled/render" // or "gopkg.in/unrolled/render.v1")
 	"net/http"
 	//	"github.com/zenazn/goji"
